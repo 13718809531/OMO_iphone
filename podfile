@@ -1,0 +1,20 @@
+platform :ios, '8.0'
+target ‘OMO_iphone’ do
+pod 'NIMKit/Full'
+pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git', :tag => '4.1.0'
+pod 'JPush'
+pod ‘SDCycleScrollView’
+pod "Qiniu", '~> 7.1'
+pod 'WechatOpenSDK'
+pod 'FreeStreamer', '~> 3.7.2'
+pod 'AFNetworking'
+pod ‘Masonry’
+pod ‘MJExtension’
+pod ‘MJRefresh’
+pod ‘MBProgressHUD’
+pod ‘BRPickerView’
+pod 'IQKeyboardManager', '~> 5.0.8'
+pod 'ijkplayer'
+pod 'FMDB'
+end
+

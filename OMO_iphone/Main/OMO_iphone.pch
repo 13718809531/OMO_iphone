@@ -1,0 +1,230 @@
+//
+//  OMO_iphone.pch
+//  OMO_iphone
+//
+//  Created by 刘卫兵 on 2018/9/5.
+//  Copyright © 2018年 刘卫兵. All rights reserved.
+//
+
+#ifndef OMO_iphone_h
+#define OMO_iphone_h
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <NIMKit.h>
+#import <NIMAVChat/NIMAVChat.h>
+
+#import "BaseViewController.h"
+#import "UIColor+Extension.h"
+#import "UIImage+ImageCategory.h"
+#import "Masonry.h"
+#import "MJRefresh.h"
+#import "UIImageView+WebCache.h"
+#import "MJExtension.h"
+#import <MBProgressHUD.h>
+#import "MBProgress.h"
+#import "UIView+Category.h"
+#import "NSString_Utils.h"
+#import "NSString+Category.h"
+#import "UIButton+Category.h"
+#import "UITextField_Custom.h"
+#import "UILabel+Category.h"
+#import "LWBConst.h"
+#import "OMOIphoneManager.h"
+#import "OMONetworkManager.h"
+
+
+#define checkNull(__X__)        (__X__) == nil || [(__X__) isEqual:[NSNull null]] ? @"" : [NSString stringWithFormat:@"%@", (__X__)]
+
+/** 记录所答的题 */
+#define DATIIDS [OMOIphoneManager sharedData].daTiIds
+
+#define CELLHEIGHT (125.f)
+//** 判断系统版本号 */
+#define SystemVersion [[UIDevice currentDevice] systemVersion].floatValue
+//判断机型
+#define kDevice_Is_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+// 判断高度
+#define IphoneY (kDevice_Is_iPhoneX ? 88.0f : 64.0f)
+// 判断tabbar高度
+#define TabBarHeight (kDevice_Is_iPhoneX ? 64.0f : 44.0f)
+/// 第一个参数是当下的控制器适配iOS11 以下的，第二个参数表示scrollview或子类
+#define AdjustsScrollViewInsetNever(controller,view) if(@available(iOS 11.0, *)) {view.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;} else if([controller isKindOfClass:[UIViewController class]]) {controller.automaticallyAdjustsScrollViewInsets = false;}
+#define Between (kDevice_Is_iPhoneX ? 24.0f : 0.0f)
+//屏幕宽
+#define SCREENW [UIScreen mainScreen].bounds.size.width
+//屏幕高
+#define SCREENH [UIScreen mainScreen].bounds.size.height
+// 屏幕比
+#define IFiphone62iphone6p 1.104f
+//weakSelf
+#define WeakSelf __weak typeof(self) weakSelf = self;
+
+#define IFScreenFit(ip5s,ip6,ip6p) ((SCREENW==375)?ip6:((SCREENW==414)?ip6p:ip5s))
+
+#define IFScreenFitF(ip4s,ip5s,ip6,ip6p) ((SCREENW==375)?ip6:((SCREENW==414)?ip6p:(SCREENH==568?ip5s:ip4s)))
+
+#define IFFitFloat(ip5s) ((ip5s)/320.f*SCREENW)
+
+#define IFFitFloat6(ip6s) ((ip6s)/375.f*SCREENW)
+
+#define IFScreenFit2(ip5s,ip6) IFScreenFit((ip5s),ip6,((ip6)*IFiphone62iphone6p))
+
+#define IFScreenFit2s(ip5s) IFScreenFit(ip5s,ip5s,((ip5s)*IFiphone62iphone6p))
+
+#define CCTopHeight IFScreenFit2(64.f ,64.f)
+//主色调
+#define  backColor RGB(238, 80, 78)
+#define  mainBackColor [UIColor colorWithHexString:@"#f3f5f9"]// 背景色
+#define  textLightColour [UIColor colorWithHexString:@"ff2040"]// 高亮色
+#define  textColour [UIColor colorWithHexString:@"333333"]
+#define  YellowColor RGB(255,160,50)// 标签黄色
+#define  GreenColor RGB(15,160,90)// 标签绿色
+#define  OrangeColor RGB(221,110,81)// 按钮色
+
+//RGB
+#define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+#define RGB(r,g,b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0f]
+#define TextColor [UIColor colorWithRed:50/255.0 green:50/255.0 blue:50/255.0 alpha:1.0f]
+#define DetailColor [UIColor colorWithRed:152/255.0 green:152/255.0 blue:152/255.0 alpha:1.0f]
+#define WHITECOLORA(a) [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:a]
+// font
+#define BoldFont(num) [UIFont fontWithName:@"Helvetica-Bold" size:num] // 字体加粗
+#define BoldObliqueFont(num) [UIFont fontWithName:@"Helvetica-BoldOblique" size:num]// 字体加粗且加斜
+#define Font(num) [UIFont systemFontOfSize:num]// 字体大小
+#define bigFont [UIFont systemFontOfSize:16]// 默认统一大字体
+#define defoultFont [UIFont systemFontOfSize:14]// 默认统一字体
+#define smallFont [UIFont systemFontOfSize:12]// 默认统一小字体
+#define navTitleFont Font(18)
+#define FontMas(num) [UIFont systemFontOfSize:IFFitFloat6(num)]// 适配字体大小
+
+
+
+/**
+ *  按比例获取尺寸(相对6，6s的屏幕宽度)
+ *
+ *  @param pxValue 尺寸
+ *
+ *  @return float
+ */
+#define GetFloatWithPX(pxValue) pxValue/375.0*SCREENW
+/**
+ *  按6，6s的屏幕高度获取相对尺寸
+ *
+ *  @param pxValue 尺寸
+ *
+ *  @return float
+ */
+#define GetFloatContrastHightWithPX(pxValue) pxValue/667.0*SCREENH
+
+CG_INLINE CGRect
+CGRectMakeContrastWidth(CGFloat x, CGFloat y, CGFloat width, CGFloat height)
+{
+    CGRect rect;
+    rect.origin.x = GetFloatWithPX(x); rect.origin.y = GetFloatWithPX(x);
+    rect.size.width = GetFloatWithPX(width); rect.size.height = GetFloatWithPX(height);
+    return rect;
+}
+
+CG_INLINE CGRect
+CGRectMakeContrastHight(CGFloat x, CGFloat y, CGFloat width, CGFloat height)
+{
+    CGRect rect;
+    rect.origin.x = GetFloatContrastHightWithPX(x); rect.origin.y = GetFloatContrastHightWithPX(x);
+    rect.size.width = GetFloatContrastHightWithPX(width); rect.size.height = GetFloatContrastHightWithPX(height);
+    return rect;
+}
+
+CG_INLINE CGSize
+CGSizeMakeContrastWidth(CGFloat width, CGFloat height)
+{
+    CGSize size;
+    size.width = GetFloatWithPX(width);
+    size.height = GetFloatWithPX(height);
+    return size;
+}
+CG_INLINE CGSize
+CGSizeMakeContrastHight(CGFloat width, CGFloat height)
+{
+    CGSize size;
+    size.width = GetFloatContrastHightWithPX(width);
+    size.height = GetFloatContrastHightWithPX(height);
+    return size;
+}
+
+//微信开发者ID
+
+#define WX_APPID @"wxefd4941cb12bede4"
+#define WX_SECRET @"202f7f492ba0e42c668697230643102b"
+
+//#define KBaseUrl @"http://app.omo.com/capp/api/api.html"
+#define KBaseUrl @"https://omoapi.yuanxinkangfu.com/capp/api/api.html"// debug
+
+
+
+
+//网易云信sdk接入导入
+#define IOS11            ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 11.0)
+
+#define Message_Font_Size   14        // 普通聊天文字大小
+#define Notification_Font_Size   10   // 通知文字大小
+#define Chatroom_Message_Font_Size 16 // 聊天室聊天文字大小
+#define UISreenWidthScale   SCREENW / 320
+
+#define SuppressPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0)
+
+#define dispatch_async_main_safe(block)\
+if ([NSThread isMainThread]) {\
+block();\
+} else {\
+dispatch_async(dispatch_get_main_queue(), block);\
+}
+
+// 判断空字符串
+#define checkNull(__X__)        (__X__) == nil || [(__X__) isEqual:[NSNull null]] ? @"" : [NSString stringWithFormat:@"%@", (__X__)]
+
+#define STRING_IS_BLANK(str) (str==nil ||![str isKindOfClass:[NSString class]]|| [str length]<1)
+
+//APPID
+#define PlaceHolder_headImg @"PlaceHolder_head"
+#define placeholder_tableImg @"PlaceHolder_Goods_tab"
+#define placeholder_collectionImg @"PlaceHolder_Goods_coll"
+#define PlaceHolderImage @"image_placeholder"
+
+//token
+#define TOKEN [YXKFManager sharedManage].token
+#define USERID [YXKFManager sharedManage].userId
+#define SUPERLEFTWIDTH (200.f)
+#define SUPERLEFTHEIGHT (40.f)
+#define NAVHEIGHT (64.F)
+
+//** 判断系统版本号 */
+#define SystemVersion [[UIDevice currentDevice] systemVersion].floatValue
+/**屏幕宽*/
+#define SCREENW [UIScreen mainScreen].bounds.size.width
+//屏幕高
+#define SCREENH [UIScreen mainScreen].bounds.size.height
+
+//主色调
+#define  backColor RGB(238, 80, 78)
+#define  textWhiteColor RGB(225, 225, 225)
+#define  textGrayColor [UIColor colorWithHexString:@"ABABAB"]
+#define  detailTextColor [UIColor colorWithHexString:@"989898"]
+//RGB
+#define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+#define RGB(r,g,b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0f]
+#define TextColor [UIColor colorWithRed:50/255.0 green:50/255.0 blue:50/255.0 alpha:1.0f]
+#define DetailColor [UIColor colorWithRed:152/255.0 green:152/255.0 blue:152/255.0 alpha:1.0f]
+#define WHITECOLORA(a) [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:a]
+
+#define NTES_USE_CLEAR_BAR - (BOOL)useClearBar{return YES;}
+
+#define NTES_FORBID_INTERACTIVE_POP - (BOOL)forbidInteractivePop{return YES;}
+#endif
+#endif /* OMO_iphone_h */
